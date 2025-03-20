@@ -2,5 +2,8 @@
 name = "thermometer"
 version = "0.1.0"
 edition = "2021"
+description = "Client and driver for network attached thermometer for Home Assistant"
+homepage = "https://github.com/smsweet66/thermometer"
+repository = "https://github.com/smsweet66/thermometer"
 
 [dependencies]
