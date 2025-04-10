@@ -1,6 +1,7 @@
 #!/bin/bash
 
 sudo echo "70" > /dev/thermometer
+cat /dev/thermometer
 
 cargo build
 cargo run &
