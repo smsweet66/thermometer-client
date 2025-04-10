@@ -5,6 +5,7 @@ use rocket::{
     http::Status,
     launch, routes,
     serde::{json::Json, Serialize},
+    Config,
 };
 
 #[derive(Serialize)]
@@ -35,5 +36,9 @@ fn get_tempurature() -> Result<Json<TempuratureResponse>, Status> {
 
 #[launch]
 fn tempurature_server() -> _ {
-    rocket::build().mount("/", routes![get_tempurature])
+    let config = Config::figment()
+        .merge((Config::PORT, 8000))
+        .merge((Config::ADDRESS, "0.0.0.0"));
+
+    rocket::custom(config).mount("/", routes![get_tempurature])
 }
