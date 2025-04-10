@@ -2,6 +2,8 @@
 
 cargo run &
 
+sleep 10
+
 expected_result='{"tempurature":70,"id":"sensor01","name":"office","connected":true}'
 result=$(curl -X GET "http://127.0.0.1:8000/tempurature")
 
