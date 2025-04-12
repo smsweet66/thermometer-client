@@ -1,5 +1,6 @@
-use std::fs;
+use std::fs::{self, File};
 
+use daemonize::Daemonize;
 use rocket::{
     get,
     http::Status,
@@ -36,6 +37,19 @@ fn get_tempurature() -> Result<Json<TemperatureResponse>, Status> {
 
 #[launch]
 fn temperature_server() -> _ {
+    let stderr = File::create("/tmp/thermometer.err").expect("Could not create stderr");
+    let stdout = File::create("/tmp/thermometer.out").expect("Could not create stdout");
+
+    let daemonize = Daemonize::new()
+        .pid_file("/tmp/thermometer.pid")
+        .stderr(stderr)
+        .stdout(stdout);
+
+    match daemonize.start() {
+        Ok(_) => println!("Daemon Started"),
+        Err(e) => eprintln!("Error: {e}"),
+    };
+
     let config = Config::figment()
         .merge((Config::PORT, 8000))
         .merge((Config::ADDRESS, "0.0.0.0"));
