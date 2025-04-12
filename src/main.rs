@@ -9,25 +9,25 @@ use rocket::{
 };
 
 #[derive(Serialize)]
-struct TempuratureResponse {
-    tempurature: i32,
+struct TemperatureResponse {
+    temperature: i32,
     id: String,
     name: String,
     connected: bool,
 }
 
-#[get("/tempurature")]
-fn get_tempurature() -> Result<Json<TempuratureResponse>, Status> {
-    let Ok(tempurature_string) = fs::read_to_string("/dev/thermometer") else {
+#[get("/temperature")]
+fn get_tempurature() -> Result<Json<TemperatureResponse>, Status> {
+    let Ok(temperature_string) = fs::read_to_string("/dev/thermometer") else {
         return Err(Status::NoContent);
     };
 
-    let Ok(tempurature) = tempurature_string.trim().parse() else {
+    let Ok(temperature) = temperature_string.trim().parse() else {
         return Err(Status::InternalServerError);
     };
 
-    Ok(Json(TempuratureResponse {
-        tempurature,
+    Ok(Json(TemperatureResponse {
+        temperature,
         id: "sensor01".to_owned(),
         name: "office".to_owned(),
         connected: true,
@@ -35,7 +35,7 @@ fn get_tempurature() -> Result<Json<TempuratureResponse>, Status> {
 }
 
 #[launch]
-fn tempurature_server() -> _ {
+fn temperature_server() -> _ {
     let config = Config::figment()
         .merge((Config::PORT, 8000))
         .merge((Config::ADDRESS, "0.0.0.0"));
